@@ -20,6 +20,17 @@
   font-size: 24px;
 }
 
+.btn {
+  padding: 4px;
+  margin: 10px;
+  border-radius: 10px;
+
+}
+.btn:hover {
+  background-color: #790404;
+  color: white;
+}
+
 .layout{
   display: flex;
   flex-flow: row nowrap;

@@ -34,8 +34,8 @@ const LifeBar = (props) => {
 
         .bar {
             text-align: left;
-            background-color:  ${props.health<0 ? 'red' : 'green'};
-            width: ${props.health}%;
+            background-color:  ${props.health<=0 ? 'red' : 'green'};
+            width: ${props.health<=0 ? 1 : props.health}%;
             height: 100%;
             z-index: 10;
             transition: width 2s, transform 2s;
