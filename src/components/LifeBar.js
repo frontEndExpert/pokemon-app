@@ -3,12 +3,12 @@ import React from 'react';
 
 
 const LifeBar = (props) => {
-    
+    const { place } = props;
     return <>
     <div className="life-bar">
             <div className="bar" >&nbsp;</div>
     </div>
-    <p className={props.player1 ? 'bar-text-left' : 'bar-text-right'}>{props.health}/100</p>
+    <p className={`bar-text-${place}`}>{props.health}/100</p>
       <style jsx>{`
         .life-bar {
             display: block;

@@ -1,5 +1,9 @@
 import React,{useState, useEffect} from 'react';
-import LifeBar from './LifeBar'
+import PlayerCard from './PlayerCard';
+import Cube from './Cube';
+import Modal from './Modal';
+import HitLine from './HitLine';
+
 
 
 const Board = () => {
@@ -15,8 +19,6 @@ const [pokemon1, setPokeMon1] = useState()
 function getRandomInt(max) {
     return Math.floor(Math.random() * max) + 1;
   }
-
-  
 
   useEffect(()=>{
             var num = getRandomInt(100)
@@ -53,8 +55,6 @@ function getRandomInt(max) {
             }) 
 
 },[])  
-
-
 
 useEffect(()=>{
     // reload new pokemon images
@@ -95,8 +95,6 @@ useEffect(()=>{
         }
 },[playerHistory])  
 
-
-
 useEffect(()=>{
     if(health[0]<=0 && health[0] < health[1]){
         setGameover(true)
@@ -107,16 +105,13 @@ useEffect(()=>{
      }
 },[health])
 
-
-
-
-  const startGame = () => {
+const startGame = () => {
     setPlayerHistory([0,0])
     setHealth([100,100])
     setGameover(false)
-  }  
+}  
 
-  const continueGame = () => {
+const continueGame = () => {
         const temp = playerHistory ? [...playerHistory] : [0,0]
         if(winner==='Player'){
             temp[0] = temp[0] + 1 ;
@@ -152,44 +147,31 @@ const rollDice = (e) => {
 }
             
     return (<>
-        <h1>Pokemon Battle Simulator</h1>
-        <div className="layout" >
-            <div className="col1" >
-                <p className="title1">Player</p>
-                <LifeBar health={health[0]} player1={true} />
-            {pokemon0 &&  <img className="pic" width="80px" height="80px" 
-            src={pokemon0 && pokemon0.pic}  alt="player" 
-            onError={({ currentTarget }) => {
-                currentTarget.onerror = null; // prevents looping
-                currentTarget.src="https://placeimg.com/80/80/animals";
-              }} /> }
-                <p>{pokemon0 && pokemon0.name}</p>
-            </div>
-            <div className="center-board" >
-                <div className="cube">{face[0]}</div><div className="cube">{face[1]}</div>
-                <div className="col10">
-                    You hit for {face[0]}<br/>
-                    Your opponent hit for {face[1]}
-                </div>
-              {gameover ? <><p className="winner">{ winner==='Opponent' ? "Game Over" : "You Win!"}</p>
+        <Modal className="modalContainer" show={gameover} >
+                <p className="winner">{ winner==='Opponent' ? "Game Over" : "You Win!"}</p>
                 <button className="btn attack" onClick={startGame} >Start with New PokeMon!</button>
                 <button className="btn attack" onClick={continueGame} >Play Again with your Pokemon!</button>
-                </>
-               : <button className="btn attack" onClick={rollDice} >Attack!</button> }
-            {playerHistory !== [0,0] &&  <p className="win_lose" >Win:{playerHistory[0]}/ Lose: {playerHistory[1]}</p>}
-            </div>
-            <div className="col2" ><p className="title2">Opponent</p>
-                <LifeBar health={health[1]} player1={false} />
-                {pokemon1 &&  <img className="pic" width="80px" height="80px"  
-                src={pokemon1.pic} alt="opponent" 
-                onError={({ currentTarget }) => {
-                    currentTarget.onerror = null; // prevents looping
-                    currentTarget.src="https://placeimg.com/80/80/animals";
-                  }} /> }
-                <p>{pokemon1 && pokemon1.name}</p>
+        </Modal>
+        <div className="big-board">
+            <h1>Pokemon Battle Simulator</h1> 
+            <div className="layout" >
+            
+                <PlayerCard  title="Player"  health={health[0]} place="left" pic={pokemon0.pic} name={pokemon0.name}  />
+                <div className="center-board" >
+                    <Cube value={face[0]} /><Cube value={face[1]} />
+                    <HitLine line="You hit for" value={face[0]} />
+                    <HitLine line="Your opponent hit for" value={face[1]} />
+                    
+                <button className="btn attack" onClick={rollDice} >Attack!</button> 
+                
+                {playerHistory !== [0,0] &&  <p className="win_lose" >
+                        Win:{playerHistory[0]}/ Lose: {playerHistory[1]}
+                    </p>}
+                </div>
+
+                <PlayerCard  title="Opponent"  health={health[1]} place="right" pic={pokemon1.pic} name={pokemon1.name}  />
             </div>
         </div>
-
     </>)
 }
 
